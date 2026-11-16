@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'YOUR_GITHUB_REPOSITORY_URL'
+                    url: 'https://github.com/mohiturkude8237/jenkins-lambda-cicd.git'
             }
         }
 
