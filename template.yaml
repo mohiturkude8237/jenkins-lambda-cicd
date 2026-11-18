@@ -2,6 +2,33 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 
 Resources:
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: jenkins-lambda-execution-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+
+      Policies:
+        - PolicyName: LambdaBasicExecution
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: '*'
+
   MyLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -11,6 +38,8 @@ Resources:
       CodeUri: src/
       MemorySize: 128
       Timeout: 10
+      Role: !GetAtt LambdaExecutionRole.Arn
+
       Events:
         ApiEvent:
           Type: Api
