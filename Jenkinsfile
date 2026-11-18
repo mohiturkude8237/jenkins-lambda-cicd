@@ -4,6 +4,7 @@ pipeline {
 
     environment {
         AWS_DEFAULT_REGION = 'ap-south-1'
+        VENV = 'venv'
     }
 
     stages {
@@ -18,20 +19,26 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh '''
-                    python3 -m pip install -r requirements.txt
+                    python3 -m venv ${VENV}
+                    ${VENV}/bin/python -m pip install --upgrade pip
+                    ${VENV}/bin/python -m pip install -r requirements.txt
                 '''
             }
         }
 
         stage('Unit Testing') {
             steps {
-                sh 'python3 -m pytest tests/'
+                sh '''
+                    ${VENV}/bin/python -m pytest tests/
+                '''
             }
         }
 
         stage('Build') {
             steps {
-                sh 'sam build'
+                sh '''
+                    sam build
+                '''
             }
         }
 
