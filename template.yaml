@@ -6,7 +6,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: jenkins-python-lambda
-      Runtime: python3.12
+      Runtime: python3.14
       Handler: app.lambda_handler
       CodeUri: src/
       MemorySize: 128
